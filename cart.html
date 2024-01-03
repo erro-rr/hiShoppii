@@ -1,0 +1,64 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="cartimg.png" type="image/ico">
+  <link rel="stylesheet" href="styles.css">
+  <title>Cart</title>
+</head>
+<body>
+  <div class="cart-modal">
+    <h1>Cart Items</h1>
+    <div class="cart-items"></div>
+    
+  </div>
+  <script src="script.js"></script>
+  <script>
+    // Function to show detailed information about items in the cart on the cart.html page
+    async function showCartDetailsOnCartPage() {
+      const cartModal = document.querySelector('.cart-modal');
+      const cartItemsContainer = document.querySelector('.cart-items');
+
+      // Fetch cart data from storage
+        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+      // Clear existing content
+      cartItemsContainer.innerHTML = '';
+
+      // Render cart items
+      for (const cartItem of cartData) {
+        const productDetails = await fetchProductById(cartItem.id);
+
+        const cartItemElement = document.createElement('div');
+        cartItemElement.classList.add('cart-item');
+
+        const thumbnailcart = document.createElement("img");
+        thumbnailcart.src = productDetails.thumbnail;
+        // thumbnail.alt = item.title;
+
+        const title = document.createElement('h3');
+        title.textContent = productDetails.title;
+
+        const category = document.createElement('p');
+        category.textContent = `Category: ${productDetails.category}`;
+
+        const price = document.createElement('p');
+        price.textContent = `Price: ${productDetails.price}`;
+
+        cartItemElement.appendChild(thumbnailcart);
+        cartItemElement.appendChild(title);
+        cartItemElement.appendChild(category);
+        cartItemElement.appendChild(price);
+
+        cartItemsContainer.appendChild(cartItemElement);
+      }
+
+      // Show the cart modal
+      cartModal.style.display = 'block';
+    }
+    // Call the function to show cart details on the cart.html page
+    showCartDetailsOnCartPage();
+  </script>
+</body>
+</html>
